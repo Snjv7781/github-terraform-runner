@@ -1,0 +1,68 @@
+# name: Deploy to GKE
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   deploy:
+#     runs-on: self-hosted
+
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v3
+
+#     - name: Setup kubectl
+#       run: |
+#         sudo apt-get update
+#         sudo apt-get install -y apt-transport-https ca-certificates gnupg
+#         sudo curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+#         echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+#         sudo apt-get update && sudo apt-get install -y google-cloud-sdk google-cloud-sdk-gke-gcloud-auth-plugin kubectl
+
+#     - name: Authenticate gcloud
+#       run: |
+#         gcloud auth activate-service-account --key-file=${{ secrets.GCP_SA_KEY }}
+#         gcloud config set project <YOUR_PROJECT_ID>
+#         gcloud config set compute/region <YOUR_REGION>
+#         gcloud container clusters get-credentials <YOUR_CLUSTER_NAME> --region <YOUR_REGION>
+
+#     - name: Deploy to GKE
+#       run: |
+#         kubectl apply -f app/app.yaml
+
+
+name: Terraform Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  terraform:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./testing-terraform
+
+      - name: Terraform Plan
+        run: terraform plan
+        working-directory: ./testing-terraform
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GCP_SA_KEY}}
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        working-directory: ./testing-terraform
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GCP_SA_KEY}}
+          

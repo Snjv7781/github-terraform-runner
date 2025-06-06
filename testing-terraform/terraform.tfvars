@@ -1,0 +1,6 @@
+project_id      = "sanjeev16-01"
+region          = "us-central1"
+zone            = "us-central1-a"
+github_repo_url = "https://github.com/Snjv7781/github-terraform-runner"
+runner_token    = "AZGENOISPKNNXD56ZMI2ZXLIH3E2A"
+vpc_name        = "sanjeev-prod-vpc"

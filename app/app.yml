@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: flask-container
-        image: gcr.io/sanjeev16-01/flask-app:latest
+        image: us-central1-docker.pkg.dev/sanjeev16-01/flask-app-repo/flask-app:latest
         ports:
         - containerPort: 8080
 ---

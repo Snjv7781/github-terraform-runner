@@ -47,8 +47,8 @@ jobs:
             --region us-central1 \
             --project sanjeev16-01
 
-      - name: check cluster access
-        run: kubectl get nodes
+      # - name: check cluster access
+      #   run: kubectl get nodes
 
       - name: Deploy to GKE
         run: kubectl apply -f app/app.yml --validate=false
